@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Register</class>
+ <widget class="QWidget" name="Register">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Register</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="registerLabel">
+     <property name="styleSheet">
+      <string>
+       QLabel {
+           font-size: 18pt;
+           font-weight: bold;
+           color: #333;
+           margin: 10px 0;
+       }
+      </string>
+     </property>
+     <property name="text">
+      <string>Create a New Account</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="fullNameLineEdit">
+     <property name="styleSheet">
+      <string>
+       QLineEdit {
+           padding: 10px;
+           border: 1px solid #aaa;
+           border-radius: 5px;
+           margin-bottom: 10px;
+       }
+      </string>
+     </property>
+     <property name="placeholderText">
+      <string>Full Name</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="emailLineEdit">
+     <property name="styleSheet">
+      <string>
+       QLineEdit {
+           padding: 10px;
+           border: 1px solid #aaa;
+           border-radius: 5px;
+           margin-bottom: 10px;
+       }
+      </string>
+     </property>
+     <property name="placeholderText">
+      <string>Email</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="passwordLineEdit">
+     <property name="styleSheet">
+      <string>
+       QLineEdit {
+           padding: 10px;
+           border: 1px solid #aaa;
+           border-radius: 5px;
+           margin-bottom: 10px;
+       }
+      </string>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Password</enum>
+     </property>
+     <property name="placeholderText">
+      <string>Password</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="confirmPasswordLineEdit">
+     <property name="styleSheet">
+      <string>
+       QLineEdit {
+           padding: 10px;
+           border: 1px solid #aaa;
+           border-radius: 5px;
+           margin-bottom: 10px;
+       }
+      </string>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Password</enum>
+     </property>
+     <property name="placeholderText">
+      <string>Confirm Password</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="roleComboBox">
+     <property name="styleSheet">
+      <string>
+       QComboBox {
+           padding: 8px;
+           border: 1px solid #aaa;
+           border-radius: 5px;
+           margin-bottom: 10px;
+       }
+      </string>
+     </property>
+     <property name="currentText">
+      <string>Admin</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>Admin</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Personal</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="agreeCheckBox">
+     <property name="styleSheet">
+      <string>
+       QCheckBox {
+           margin: 10px 0;
+       }
+      </string>
+     </property>
+     <property name="text">
+      <string>I agree to the Terms and Conditions</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="registerButton">
+     <property name="styleSheet">
+      <string>
+       QPushButton {
+           background-color: #28a745;
+           color: white;
+           padding: 10px;
+           border-radius: 5px;
+           margin-bottom: 10px;
+       }
+       QPushButton:hover {
+           background-color: #218838;
+       }
+      </string>
+     </property>
+     <property name="text">
+      <string>Register</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="backToLoginButton">
+     <property name="styleSheet">
+      <string>
+       QPushButton {
+           background-color: #6c757d;
+           color: white;
+           padding: 10px;
+           border-radius: 5px;
+       }
+       QPushButton:hover {
+           background-color: #5a6268;
+       }
+      </string>
+     </property>
+     <property name="text">
+      <string>Back to Login</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

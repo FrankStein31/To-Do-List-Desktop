@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DeleteConfirmDialog</class>
+ <widget class="QDialog" name="DeleteConfirmDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>300</width>
+    <height>150</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Confirm Delete</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="confirmLabel">
+     <property name="text">
+      <string>Are you sure you want to delete this task?</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="buttonWidget" native="true">
+     <layout class="QHBoxLayout" name="buttonLayout">
+      <item>
+       <widget class="QPushButton" name="yesButton">
+        <property name="text">
+         <string>Yes</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="noButton">
+        <property name="text">
+         <string>No</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

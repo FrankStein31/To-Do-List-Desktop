@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dashboard</class>
+ <widget class="QWidget" name="Dashboard">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dashboard</string>
+  </property>
+  <property name="styleSheet">
+   <string>
+    QWidget {
+        background-color: #f7f7f7;
+    }
+   </string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QWidget" name="summaryWidget" native="true">
+     <layout class="QHBoxLayout" name="summaryLayout">
+      <item>
+       <widget class="QLabel" name="totalTasks">
+        <property name="styleSheet">
+         <string>
+          QLabel {
+              font-weight: bold;
+              color: #4CAF50;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Total Tasks: 10</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="completedTasks">
+        <property name="styleSheet">
+         <string>
+          QLabel {
+              font-weight: bold;
+              color: #007BFF;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Completed: 5</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="remainingTasks">
+        <property name="styleSheet">
+         <string>
+          QLabel {
+              font-weight: bold;
+              color: #FFC107;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Remaining: 5</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="searchBar">
+     <property name="styleSheet">
+      <string>
+       QLineEdit {
+           border: 1px solid #ccc;
+           border-radius: 5px;
+           padding: 5px;
+           background-color: #ffffff;
+       }
+      </string>
+     </property>
+     <property name="placeholderText">
+      <string>Search tasks...</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="filterWidget" native="true">
+     <layout class="QHBoxLayout" name="filterLayout">
+      <item>
+       <widget class="QComboBox" name="filterComboBox">
+        <property name="styleSheet">
+         <string>
+          QComboBox {
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              padding: 3px;
+              background-color: #ffffff;
+          }
+         </string>
+        </property>
+        <property name="currentText">
+         <string>Personal</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Personal</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Team</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Deadline Today</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>In Progress</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="refreshButton">
+        <property name="styleSheet">
+         <string>
+          QPushButton {
+              background-color: #4CAF50;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              padding: 5px 10px;
+          }
+          QPushButton:hover {
+              background-color: #45a049;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Refresh</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="progressBar">
+     <property name="styleSheet">
+      <string>
+       QProgressBar {
+           border: 1px solid #ccc;
+           border-radius: 5px;
+           background: #f3f3f3;
+       }
+       QProgressBar::chunk {
+           background-color: #4CAF50;
+           width: 20px;
+       }
+      </string>
+     </property>
+     <property name="value">
+      <number>50</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="todoTable">
+     <property name="styleSheet">
+      <string>
+       QTableWidget {
+           background-color: #ffffff;
+           border: 1px solid #ccc;
+           border-radius: 5px;
+       }
+       QHeaderView::section {
+           background-color: #4CAF50;
+           color: white;
+           padding: 4px;
+           font-weight: bold;
+       }
+      </string>
+     </property>
+     <column>
+      <property name="text">
+       <string>Title</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Description</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Status</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Priority</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="buttonWidget" native="true">
+     <layout class="QHBoxLayout" name="buttonLayout">
+      <item>
+       <widget class="QPushButton" name="addButton">
+        <property name="styleSheet">
+         <string>
+          QPushButton {
+              background-color: #007BFF;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              padding: 5px 10px;
+          }
+          QPushButton:hover {
+              background-color: #0056b3;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Add</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="editButton">
+        <property name="styleSheet">
+         <string notr="true">
+          QPushButton {
+              background-color: #FFC107rgb(85, 255, 0);
+	background-color: rgb(255, 85, 0);
+              color: white;
+              border: none;
+              border-radius: 5px;
+              padding: 5px 10px;
+          }
+          QPushButton:hover {
+              background-color: #e0a800;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Edit</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="deleteButton">
+        <property name="styleSheet">
+         <string>
+          QPushButton {
+              background-color: #DC3545;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              padding: 5px 10px;
+          }
+          QPushButton:hover {
+              background-color: #c82333;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="backButton">
+     <property name="styleSheet">
+      <string>
+       QPushButton {
+           background-color: #6c757d;
+           color: white;
+           border: none;
+           border-radius: 5px;
+           padding: 5px 10px;
+       }
+       QPushButton:hover {
+           background-color: #5a6268;
+       }
+      </string>
+     </property>
+     <property name="text">
+      <string>Back</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CrudForm</class>
+ <widget class="QWidget" name="CrudForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>CRUD Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="formLabel">
+     <property name="styleSheet">
+      <string>
+       QLabel {
+           font-size: 16pt;
+           font-weight: bold;
+           color: #333;
+       }
+      </string>
+     </property>
+     <property name="text">
+      <string>Create Task</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="titleLineEdit">
+     <property name="styleSheet">
+      <string>
+       QLineEdit {
+           padding: 10px;
+           border: 1px solid #aaa;
+           border-radius: 5px;
+       }
+      </string>
+     </property>
+     <property name="placeholderText">
+      <string>Enter title...</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="descriptionLineEdit">
+     <property name="styleSheet">
+      <string>
+       QLineEdit {
+           padding: 10px;
+           border: 1px solid #aaa;
+           border-radius: 5px;
+       }
+      </string>
+     </property>
+     <property name="placeholderText">
+      <string>Enter description...</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="typeComboBox">
+     <property name="styleSheet">
+      <string>
+       QComboBox {
+           padding: 10px;
+           border: 1px solid #aaa;
+           border-radius: 5px;
+       }
+      </string>
+     </property>
+     <property name="currentText">
+      <string>Team</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>Team</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Personal</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="saveButton">
+       <property name="styleSheet">
+        <string>
+         QPushButton {
+             background-color: #0078d7;
+             color: white;
+             padding: 10px;
+             border-radius: 5px;
+         }
+         QPushButton:hover {
+             background-color: #005fa3;
+         }
+        </string>
+       </property>
+       <property name="text">
+        <string>Save</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton">
+       <property name="styleSheet">
+        <string>
+         QPushButton {
+             background-color: #dc3545;
+             color: white;
+             padding: 10px;
+             border-radius: 5px;
+         }
+         QPushButton:hover {
+             background-color: #c82333;
+         }
+        </string>
+       </property>
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
