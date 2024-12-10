@@ -28,15 +28,12 @@ class DatabaseManager:
 
     def register_user(self, full_name, email, password, role):
         try:
-            # Check if email already exists
             self.cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
             if self.cursor.fetchone():
                 return False, "Email already registered"
 
-            # Hash password before storing
             hashed_password = self.hash_password(password)
             
-            # Insert new user
             query = "INSERT INTO users (full_name, email, password, role) VALUES (%s, %s, %s, %s)"
             self.cursor.execute(query, (full_name, email, hashed_password, role))
             self.connection.commit()
@@ -47,10 +44,8 @@ class DatabaseManager:
 
     def login_user(self, email, password):
         try:
-            # Hash the provided password
             hashed_password = self.hash_password(password)
             
-            # Check credentials
             query = "SELECT * FROM users WHERE email = %s AND password = %s"
             self.cursor.execute(query, (email, hashed_password))
             user = self.cursor.fetchone()
@@ -60,48 +55,16 @@ class DatabaseManager:
             print(f"Login error: {e}")
             return False, None
 
-    # def get_tasks(self, user_id, task_filter=None, user_role=None):
-    #     try:
-    #         base_query = "SELECT * FROM tasks WHERE user_id = %s"
-    #         params = [user_id]
-
-    #         # If not an admin, only show approved tasks
-    #         if user_role != 'Admin':
-    #             base_query += " AND approval_status = 'Approved'"
-                
-    #         # Add existing filter logic
-    #         if task_filter == 'Personal':
-    #             base_query += " AND type = 'Personal'"
-    #         elif task_filter == 'Team':
-    #             base_query += " AND type = 'Team'"
-    #         elif task_filter == 'Deadline Today':
-    #             base_query += " AND DATE(deadline) = CURRENT_DATE"
-    #         elif task_filter == 'In Progress':
-    #             base_query += " AND status = 'In Progress'"
-    #         elif task_filter == 'Complete':
-    #             base_query += " AND status = 'Completed'"
-
-    #         self.cursor.execute(base_query, params)
-    #         return self.cursor.fetchall()
-    #     except mysql.connector.Error as e:
-    #         print(f"Error fetching tasks: {e}")
-    #         return []
-
     def get_tasks(self, user_id, task_filter=None, user_role=None):
         try:
-            # Base query with modifications for admin users
             if user_role == 'Admin':
-                # For admin, show all tasks including team tasks from all users
-                # base_query = "SELECT * FROM tasks WHERE 1=1"
                 base_query = "SELECT * FROM tasks WHERE user_id = %s"
                 params = [user_id]
             else:
-                # For non-admin users, show their own tasks and approved tasks
                 base_query = "SELECT * FROM tasks WHERE user_id = %s"
                 params = [user_id]
                 base_query += " AND approval_status = 'Approved'"
 
-            # Add filter logic
             if task_filter == 'Personal':
                 base_query += " AND type = 'Personal'"
             elif task_filter == 'Team':
@@ -115,9 +78,8 @@ class DatabaseManager:
             elif task_filter == 'Incomplete':
                 base_query += " AND status != 'Completed'"
 
-            # For admin, also include all team tasks
             if user_role == 'Admin':
-                base_query += " OR type = 'Team'"
+                base_query += " OR (type = 'Team' AND approval_status = 'Approved')"
 
             self.cursor.execute(base_query, params)
             return self.cursor.fetchall()
@@ -145,7 +107,6 @@ class DatabaseManager:
     
     def create_task(self, user_id, title, description, status, priority, task_type, deadline, user_role):
         try:
-            # Determine approval status based on user role and task type
             if user_role == 'Admin':
                 approval_status = 'Approved'
             elif task_type == 'Team':
@@ -161,28 +122,13 @@ class DatabaseManager:
             self.cursor.execute(query, (user_id, title, description, status, priority, task_type, deadline, approval_status))
             self.connection.commit()
             
-            # If it's a team task by a personal user, notify admin
             if approval_status == 'Pending':
-                return True, "Team task created and awaiting admin approval"
+                return True, "Tugas Tim berhasil ditambahkan dan menunggu persetujuan admin"
             
-            return True, "Task created successfully"
+            return True, "Tugas berhasil ditambah"
         except mysql.connector.Error as e:
             return False, f"Failed to create task: {str(e)}"
 
-    # def update_task(self, task_id, user_id, title, description, status, priority, task_type, deadline):
-    #     try:
-    #         query = """
-    #         UPDATE tasks 
-    #         SET title = %s, description = %s, status = %s, 
-    #             priority = %s, type = %s, deadline = %s
-    #         WHERE id = %s AND user_id = %s
-    #         """
-    #         self.cursor.execute(query, (title, description, status, priority, task_type, deadline, task_id, user_id))
-    #         self.connection.commit()
-    #         return True, "Task updated successfully"
-    #     except mysql.connector.Error as e:
-    #         return False, f"Failed to update task: {str(e)}"
-        
     def update_task(self, task_id, user_id, title, description, status, priority, task_type, deadline, user_role):
         try:
             # approval_status = 'Approved' if user_role == 'Admin' else 'Pending'
@@ -201,7 +147,7 @@ class DatabaseManager:
             # if approval_status == 'Pending':
             #     return True, "Task updated and awaiting admin approval"
             
-            return True, "Task updated successfully"
+            return True, "Tugas berhasil diedit"
         except mysql.connector.Error as e:
             return False, f"Failed to update task: {str(e)}"
 
@@ -210,7 +156,7 @@ class DatabaseManager:
             query = "DELETE FROM tasks WHERE id = %s AND user_id = %s"
             self.cursor.execute(query, (task_id, user_id))
             self.connection.commit()
-            return True, "Task deleted successfully"
+            return True, "Tugas berhasil dihapus"
         except mysql.connector.Error as e:
             return False, f"Failed to delete task: {str(e)}"
 
@@ -279,15 +225,15 @@ class RegisterWindow(QtWidgets.QWidget):
         role = self.ui.roleComboBox.currentText()
 
         if not full_name or not email or not password:
-            QtWidgets.QMessageBox.warning(self, "Registration Error", "Please fill all fields")
+            QtWidgets.QMessageBox.warning(self, "Registration Error", "Isi semua kolom")
             return
 
         if password != confirm_password:
-            QtWidgets.QMessageBox.warning(self, "Registration Error", "Passwords do not match")
+            QtWidgets.QMessageBox.warning(self, "Registration Error", "Password berbeda dari yang sebelumnya")
             return
 
         if not self.ui.agreeCheckBox.isChecked():
-            QtWidgets.QMessageBox.warning(self, "Registration Error", "Please agree to Terms and Conditions")
+            QtWidgets.QMessageBox.warning(self, "Registration Error", "Silahkan setujui aturan kami!")
             return
 
         success, message = self.db_manager.register_user(full_name, email, password, role)
@@ -326,7 +272,7 @@ class LoginWindow(QtWidgets.QWidget):
         password = self.ui.passwordLineEdit.text()
 
         if not email or not password:
-            QtWidgets.QMessageBox.warning(self, "Login Error", "Please enter both email and password")
+            QtWidgets.QMessageBox.warning(self, "Login Error", "Isi keduanya email dan password")
             return
 
         success, user = self.db_manager.login_user(email, password)
@@ -336,7 +282,7 @@ class LoginWindow(QtWidgets.QWidget):
             self.dashboard.show()
             self.close()
         else:
-            QtWidgets.QMessageBox.warning(self, "Login Error", "Invalid email or password")
+            QtWidgets.QMessageBox.warning(self, "Login Error", "Email atau password salah")
 
     def open_register(self):
         self.register_window = RegisterWindow(self.db_manager)
@@ -368,7 +314,7 @@ class AddTaskDialog(QtWidgets.QDialog):
         deadline = self.ui.deadlineInput.date().toString("yyyy-MM-dd")
 
         if not title:
-            QtWidgets.QMessageBox.warning(self, "Error", "Title is required")
+            QtWidgets.QMessageBox.warning(self, "Error", "Berikan Judul")
             return
 
         success, message = self.db_manager.create_task(
@@ -397,46 +343,36 @@ class CrudForm(QtWidgets.QDialog):
         
         from PyQt5.QtCore import QDate
         
-        # Remove extra widgets from previous modification
-        # Add status and priority ComboBox directly in the form setup
         self.status_combo = QtWidgets.QComboBox(self)
         self.status_combo.addItems(['Pending', 'In Progress', 'Completed'])
         
         self.priority_combo = QtWidgets.QComboBox(self)
         self.priority_combo.addItems(['Low', 'Medium', 'High'])
         
-        # Modify the setupUi method to include these widgets
-        # Insert status and priority before type ComboBox
         self.ui.verticalLayout.insertWidget(3, QtWidgets.QLabel("Status:"))
         self.ui.verticalLayout.insertWidget(4, self.status_combo)
         
         self.ui.verticalLayout.insertWidget(5, QtWidgets.QLabel("Priority:"))
         self.ui.verticalLayout.insertWidget(6, self.priority_combo)
         
-        # Configure deadline DateEdit (which is already in the UI from previous setup)
         self.ui.deadlineDateEdit.setCalendarPopup(True)
         self.ui.deadlineDateEdit.setDate(QDate.currentDate())
         
-        # Set window title and form label
         self.setWindowTitle("Edit Task" if task else "Create Task")
         
-        # Populate form if editing existing task
         if task:
             self.ui.formLabel.setText("Edit Task")
             self.ui.titleLineEdit.setText(str(task.get('title', '')))
             self.ui.descriptionLineEdit.setText(str(task.get('description', '')))
             
-            # Set ComboBox values
             self.ui.typeComboBox.setCurrentText(str(task.get('type', 'Personal')))
             self.status_combo.setCurrentText(str(task.get('status', 'Pending')))
             self.priority_combo.setCurrentText(str(task.get('priority', 'Medium')))
 
-            # Set deadline if available
             if task.get('deadline'):
                 deadline_date = QDate.fromString(str(task.get('deadline')), "yyyy-MM-dd")
                 self.ui.deadlineDateEdit.setDate(deadline_date)
         
-        # Connect buttons
         self.ui.saveButton.clicked.connect(self.save_task)
         self.ui.cancelButton.clicked.connect(self.close)
 
@@ -449,11 +385,11 @@ class CrudForm(QtWidgets.QDialog):
         priority = self.priority_combo.currentText()
 
         if not title:
-            QtWidgets.QMessageBox.warning(self, "Error", "Title is required")
+            QtWidgets.QMessageBox.warning(self, "Error", "Berikan judul")
             return
 
         try:
-            if self.task:  # Edit existing task
+            if self.task: 
                 success, message = self.db_manager.update_task(
                     self.task.get('id'), 
                     self.user_id, 
@@ -503,40 +439,33 @@ class Dashboard(QtWidgets.QWidget):
         self.connect_buttons()
 
     def setup_dashboard(self):
-        # tasks = self.db_manager.get_tasks(self.user_id)
         tasks = self.db_manager.get_tasks(self.user_id, user_role=self.user_role)
 
         if self.user_role == 'Admin':
             pending_tasks = self.db_manager.get_pending_tasks()
             self.setup_pending_tasks_tab(pending_tasks)
         
-        # Pastikan jumlah kolom sesuai kebutuhan
         self.ui.todoTable.setRowCount(len(tasks))
-        self.ui.todoTable.setColumnCount(7)  # Tambahkan kolom untuk "Deadline"
+        self.ui.todoTable.setColumnCount(7) 
         self.ui.todoTable.setHorizontalHeaderLabels(
             ["Title", "Description", "Status", "Type", "Priority", "Deadline", "Approval status"]
         )
 
-        # Hubungkan search bar dengan pencarian
         self.ui.searchBar.textChanged.connect(self.search_tasks)
 
-        # Konfigurasi menu konteks
         self.ui.todoTable.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui.todoTable.customContextMenuRequested.connect(self.show_task_context_menu)
 
-        # Hitung statistik tugas
         total_tasks = len(tasks)
         completed_tasks = sum(1 for task in tasks if task['status'] == 'Completed')
         remaining_tasks = total_tasks - completed_tasks
         progress_percentage = int((completed_tasks / total_tasks) * 100) if total_tasks > 0 else 0
 
-        # Perbarui tampilan statistik
         self.ui.totalTasks.setText(f"Total Tasks: {total_tasks}")
         self.ui.completedTasks.setText(f"Completed: {completed_tasks}")
         self.ui.remainingTasks.setText(f"Remaining: {remaining_tasks}")
         self.ui.progressBar.setValue(progress_percentage)
 
-        # Tampilkan data tugas dalam tabel
         for row, task in enumerate(tasks):
             self.ui.todoTable.setItem(row, 0, QtWidgets.QTableWidgetItem(task.get('title', '')))
             self.ui.todoTable.setItem(row, 1, QtWidgets.QTableWidgetItem(task.get('description', '')))
@@ -546,7 +475,6 @@ class Dashboard(QtWidgets.QWidget):
             self.ui.todoTable.setItem(row, 5, QtWidgets.QTableWidgetItem(task.get('deadline', 'N/A')))
             self.ui.todoTable.setItem(row, 6, QtWidgets.QTableWidgetItem(task.get('approval_status', 'N/A')))
 
-        # Sesuaikan lebar kolom
         self.ui.todoTable.resizeColumnsToContents()
 
     def setup_pending_tasks_tab(self, pending_tasks):
@@ -582,7 +510,6 @@ class Dashboard(QtWidgets.QWidget):
 
             pending_table.setCellWidget(row, 6, button_widget)
 
-        # Add the pending tasks table to a new tab
         self.ui.tabWidget.addTab(pending_table, "Pending Tasks")
 
     def approve_task(self, task):
@@ -632,7 +559,7 @@ class Dashboard(QtWidgets.QWidget):
         try:
             selected_row = self.ui.todoTable.currentRow()
             if selected_row == -1:
-                QtWidgets.QMessageBox.warning(self, "Error", "Please select a task to edit")
+                QtWidgets.QMessageBox.warning(self, "Error", "Pilih yang mau di edit")
                 return
 
             tasks = self.db_manager.get_tasks(self.user_id, user_role=self.user_role)
@@ -657,7 +584,7 @@ class Dashboard(QtWidgets.QWidget):
     def delete_task(self):
         selected_row = self.ui.todoTable.currentRow()
         if selected_row == -1:
-            QtWidgets.QMessageBox.warning(self, "Error", "Please select a task to delete")
+            QtWidgets.QMessageBox.warning(self, "Error", "Pilih yang mau di hapus")
             return
 
         delete_confirm = DeleteConfirmDialog(self)
@@ -734,7 +661,7 @@ class Dashboard(QtWidgets.QWidget):
     def view_task_history(self):
         selected_row = self.ui.todoTable.currentRow()
         if selected_row == -1:
-            QtWidgets.QMessageBox.warning(self, "Error", "Please select a task to view detail")
+            QtWidgets.QMessageBox.warning(self, "Error", "Pilih yang mau di view detail")
             return
 
         tasks = self.db_manager.get_tasks(self.user_id)
@@ -750,7 +677,8 @@ class Dashboard(QtWidgets.QWidget):
             f"Status: {task['status']}",
             f"Type: {task['type']}",
             f"Priority: {task['priority']}",
-            f"Created At: {task.get('created_at', 'N/A')}"
+            f"Dibuat pada: {task.get('created_at', 'N/A')}",
+            f"Deadline: {task['deadline']}",
         ]
 
         for detail in details:
